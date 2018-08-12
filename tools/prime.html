@@ -1,0 +1,25 @@
+<script>
+    function isPrime(x) {
+        if (x == 1)
+            return false;
+        if (x == 2)
+            return true;
+        if (x % 2 == 0)
+            return false;
+        for (var i = 3; i <= Math.sqrt(x); i += 2) {
+            if (x % i == 0)
+                return false;
+        }
+        return true;
+    }
+    function execute() {
+        var v = Number(document.getElementById("number").value);
+        var flag = isPrime(v);
+        document.getElementById("result").innerHTML = v + (flag ? "是" : "不是") + "素数";
+    }
+</script>
+<center>
+    <h3>判断素数</h3>
+    <input type="text" id="number" onkeyup="execute();"/>
+    <p id="result"></p>
+</center>
