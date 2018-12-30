@@ -1,0 +1,63 @@
+<script>	
+	var W = new Array(7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2);
+	var C = new Array(1,0,10,9,8,7,6,5,4,3,2);
+	
+    function checkCode(str) {
+		var re=0;
+        for(var i=0;i<=16;i++){
+			re+=Number(str.charAt(i))*W[i];
+		}
+		re %= 11;
+		re = C[re];
+		if(re==10) re="X";
+		else re=String(re);
+		return str.replace('#',re);
+    }
+	function notCheckCode(str) {
+        var re;
+		if(str.charAt(17)=="X")re=10;
+		else re=Number(str.charAt(17));
+		re=C[re];
+		var ru=re;
+		var strOri=str;
+		str=str.replace('#','0');
+		re=0;
+		for(var i=0;i<=16;i++){
+			re+=Number(str.charAt(i))*W[i];
+		}
+		var b=0;
+		while((re+W[strOri.indexOf("#")]*b)%11!=ru)b++;
+		return strOri.replace('#',String(b));
+    }
+	function validate(str) {
+		if(str.length!=18) return false;
+		for(var i=0;i<=17;i++) if(!(48<=str.charCodeAt(i)&&str.charCodeAt(i)<=57||str.charCodeAt(i)==35||str.charCodeAt(i)==88)) return false;
+		if(str.indexOf("#")==-1) return false;
+		return true;
+	}
+    function execute() {
+        var v = String(document.getElementById("ID").value);
+		if(!validate(v)) {
+			document.getElementById("result").innerHTML = "输入错误，请重新输入！";
+			return;
+		}
+		var result;
+		if(v.charAt(17)=='#') result=checkCode(v);
+		else result=notCheckCode(v);
+        document.getElementById("result").innerHTML = result;
+    }
+	
+	document.onkeydown=keyListener;
+    function keyListener(e){
+        if(e.keyCode == 13){
+            execute();
+        }
+    }
+</script>
+<center>
+    <h3>身份证补位</h3>
+	<p>简介：该程序是一个可以将缺失的身份证补位的程序。任意正确的二代18位身份证号码缺少一位都可以由本程序推算出来。使用方法：将所缺的一位用#号代替输入。例如：61092119900402388X，第一位缺失，即可输入#1092119900402388X。最后一位为X的一定要大写。</p>
+    <input type="text" id="ID" maxlength="18" />
+	<button onclick="execute();">补位</button>
+    <p id="result"></p>
+</center>
